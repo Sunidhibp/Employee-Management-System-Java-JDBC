@@ -26,17 +26,14 @@ public class MainApp {
 
             switch (choice) {
                 case 1:
-                    System.out.print("Name: ");
-                    String name = sc.nextLine();
+                    String name = readNonEmptyString(sc, "Name");
+                    String department = readNonEmptyString(sc, "Department");
+                    double salary = readPositiveDouble(sc, "Salary");
 
-                    System.out.print("Department: ");
-                    String dept = sc.nextLine();
-
-                    System.out.print("Salary: ");
-                    double salary = sc.nextDouble();
-
-                    dao.addEmployee(new Employee(name, dept, salary));
+                    Employee emp = new Employee(name, department, salary);
+                    dao.addEmployee(emp);
                     break;
+
 
                 case 2:
                     System.out.println("\n📋 Employee List:");
@@ -87,5 +84,34 @@ public class MainApp {
             }
         }
     }
+
+    private static String readNonEmptyString(Scanner sc, String fieldName) {
+        String input;
+        do {
+            System.out.print("Enter " + fieldName + ": ");
+            input = sc.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("❌ " + fieldName + " cannot be empty.");
+            }
+        } while (input.isEmpty());
+        return input;
+    }
+
+    private static double readPositiveDouble(Scanner sc, String fieldName) {
+        double value = -1;
+        while (value <= 0) {
+            System.out.print("Enter " + fieldName + ": ");
+            try {
+                value = Double.parseDouble(sc.nextLine());
+                if (value <= 0) {
+                    System.out.println("❌ " + fieldName + " must be greater than 0.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Please enter a valid number.");
+            }
+        }
+        return value;
+    }
+
 
 }
